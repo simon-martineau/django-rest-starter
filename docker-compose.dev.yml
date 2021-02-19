@@ -8,9 +8,9 @@ services:
             dockerfile: build/dev/Dockerfile
         environment:
             - POSTGRES_HOST=postgres
-            - POSTGRES_NAME=postgres
+            - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
-            - POSTGRES_PASS=devpassword
+            - POSTGRES_PASSWORD=devpassword
         expose:
             - 8000
         volumes:
