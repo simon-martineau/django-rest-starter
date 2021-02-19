@@ -10,4 +10,5 @@ RUN pip install -r requirements/requirements.base.txt && \
 		pip install -r requirements/requirements.test.txt
 
 COPY build/dev/start_dev.sh /
+COPY build/dev/migrate.sh /
 COPY . /code/

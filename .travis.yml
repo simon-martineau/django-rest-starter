@@ -12,9 +12,9 @@ services:
 before_script: pip install docker-compose
 
 script:
-    - docker-compose -f docker-compose.dev.yml run api sh -c "python3 manage.p"
+    - docker-compose -f docker-compose.dev.yml run api sh -c "source ./migrate.sh"
     - docker-compose -f docker-compose.dev.yml run api flake8
-    - docker-compose -f docker-compose.dev.yml run api python3 manage.py test
+    - docker-compose -f docker-compose.dev.yml run api sh -c "coverage run --source='.' manage.py test && coverage xml"
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
