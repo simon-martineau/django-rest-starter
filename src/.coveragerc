@@ -1,5 +1,5 @@
 [run]
 omit =
-	central/*
+	django_rest_starter/*
 	manage.py
 	*_unused.py
