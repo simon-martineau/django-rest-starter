@@ -1,4 +1,5 @@
-.idea
+**/.idea
+
 src/staticfiles
 src/media
 **/migrations

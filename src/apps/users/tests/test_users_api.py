@@ -4,12 +4,11 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 from apps.users.models import User
-from apps.core import sample_user
 
 
 CREATE_USER_URL = reverse('users:create')
-TOKEN_URL = reverse('users:token')
-MANAGE_URL = reverse('users:manage')
+TOKEN_OBTAIN_URL = reverse('token_obtain_pair')
+TOKEN_REFRESH_URL = reverse('token_refresh')
 
 
 class PublicUserApiTests(TestCase):
@@ -50,62 +49,57 @@ class PublicUserApiTests(TestCase):
 
         self.assertFalse(user_exists)
 
-    def test_create_token_for_user(self):
+    def test_obtain_token_pair_for_user(self):
         """Test that a token is created for the user"""
         payload = {'email': 'test@marsimon.com', 'password': 'password123'}
         User.objects.create_user(**payload)
 
-        res = self.client.post(TOKEN_URL, payload)
-        self.assertIn('token', res.data)
+        res = self.client.post(TOKEN_OBTAIN_URL, payload)
+        self.assertIn('access', res.data)
+        self.assertIn('refresh', res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_create_token_invalid_credentials(self):
         """Test that a token is not created if invalid credentials are given"""
         User.objects.create_user(email='test@marsimon.com', password='password123')
         payload = {'email': 'test@marsimon.com', 'password': 'wrongpassword'}
-        res = self.client.post(TOKEN_URL, payload)
+        res = self.client.post(TOKEN_OBTAIN_URL, payload)
 
-        self.assertNotIn('token', res.data)
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertNotIn('access', res.data)
+        self.assertNotIn('refresh', res.data)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_create_token_no_user(self):
         """Test that token is not created when user does not exist"""
         payload = {'email': 'test@marsimon.com', 'password': 'password123'}
-        res = self.client.post(TOKEN_URL, payload)
+        res = self.client.post(TOKEN_OBTAIN_URL, payload)
 
-        self.assertNotIn('token', res.data)
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertNotIn('access', res.data)
+        self.assertNotIn('refresh', res.data)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_create_token_missing_field(self):
         """Test that email and password are required"""
-        res = self.client.post(TOKEN_URL, {'password': 'test'})
+        res = self.client.post(TOKEN_OBTAIN_URL, {'password': 'test'})
 
-        self.assertNotIn('token', res.data)
+        self.assertNotIn('access', res.data)
+        self.assertNotIn('refresh', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_refresh_token(self):
+        """Test that refresh token works properly"""
+        payload = {'email': 'test@marsimon.com', 'password': 'password123'}
+        User.objects.create_user(**payload)
+        res = self.client.post(TOKEN_OBTAIN_URL, payload)
 
-class PrivateUserApiTests(TestCase):
-    """Test the users API (public)"""
+        refreh_token = res.data['refresh']
+        res2 = self.client.post(TOKEN_REFRESH_URL, {'refresh': refreh_token})
+        self.assertIn('access', res2.data)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def setUp(self):
-        self.client = APIClient()
-        self.user = sample_user()
-        self.client.force_authenticate(self.user)
-
-    def test_update_user_password_patch(self):
-        """Test updating the user's password"""
-        payload = {'password': 'newpassword123'}
-        res = self.client.patch(MANAGE_URL, payload)
-
-        self.user.refresh_from_db()
-        self.assertTrue(res.status_code, status.HTTP_200_OK)
-        self.assertTrue(self.user.check_password(payload['password']))
-
-    def test_update_user_password_put(self):
-        """Test updating the user's password"""
-        payload = {'email': 'testing@marsimon.com', 'password': 'newpassword123'}
-        res = self.client.put(MANAGE_URL, payload)
-
-        self.user.refresh_from_db()
-        self.assertTrue(res.status_code, status.HTTP_200_OK)
-        self.assertTrue(self.user.check_password(payload['password']))
+    def test_refresh_token_invalid(self):
+        """Test that refresh token returns 401 when invalid"""
+        payload = {'refresh': 'some_invalid_token'}
+        res = self.client.post(TOKEN_REFRESH_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertNotIn('access', res.data)
