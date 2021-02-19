@@ -12,7 +12,7 @@ services:
 before_script: pip install docker-compose
 
 script:
-    - docker-compose -f docker-compose.dev.yml run api sh -c "source ./migrate.sh"
+    - docker-compose -f docker-compose.dev.yml run api bash -c "source /migrate.sh"
     - docker-compose -f docker-compose.dev.yml run api flake8
     - docker-compose -f docker-compose.dev.yml run api sh -c "coverage run --source='.' manage.py test && coverage xml"
 
