@@ -3,6 +3,6 @@ omit =
 	django_rest_starter/*
 	manage.py
 	*_unused.py
-	apps/core/management
-  apps/core/testing
+	apps/core/management/*
+  apps/core/testing/*
 
