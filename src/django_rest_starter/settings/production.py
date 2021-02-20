@@ -4,7 +4,7 @@ from .base import *
 # --------------------------------------------------------------------------------
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
-ALLOWED_HOSTS = ['mysite.com', ]
+ALLOWED_HOSTS = ['starter.simonmartineau.dev', ]
 
 # REST FRAMEWORK
 # --------------------------------------------------------------------------------
@@ -16,3 +16,6 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
 
+# https://docs.djangoproject.com/en/3.1/ref/settings/#secure-proxy-ssl-header
+# This tells django that requests with this header are secure (https is handled by the proxy)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
