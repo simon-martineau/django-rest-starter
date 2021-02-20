@@ -15,7 +15,7 @@ ssh $USER@$REMOTEHOST "mkdir -p ${TARGET}"
 
 echo -e "${GREEN}Copying files to remote server...${NC}"
 for i in "${WHAT_TO_COPY[@]}"; do
-	rsync -r ./${i} $USER@$REMOTEHOST:$TARGET
+	rsync -r ./${i} $USER@$REMOTEHOST:$TARGET --delete
 done
 
 echo -e "${GREEN}Performing ssh into server.${NC}"

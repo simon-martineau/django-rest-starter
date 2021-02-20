@@ -12,9 +12,8 @@ services:
         expose:
             - 8000
         volumes:
-            - ./src:/code
-            - static_volume:/code/staticfiles
-            - media_volume:/code/media
+            - static_volume:/home/app/static
+            - media_volume:/home/app/media
         depends_on:
             - postgres
 
