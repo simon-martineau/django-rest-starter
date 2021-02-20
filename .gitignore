@@ -1,5 +1,6 @@
 **/.idea
-instance
+instance/*
+!instance/.gitkeep
 data
 
 src/staticfiles
