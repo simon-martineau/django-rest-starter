@@ -12,3 +12,5 @@ INTERNAL_IPS = [
 ]
 
 ALLOWED_HOSTS = ['*']
+
+STATIC_ROOT = '/var/www/static'
