@@ -18,18 +18,18 @@ Perform these steps to quickly get started
 **Note:** ports 8000 and 5444 need to be available
 ```bash
 cd someapi
-docker-compose -f ./docker-compose.dev.yml up -d
+docker-compose up -d
 ```
 
 The api should be available at http://localhost:8000
 
 You can always use the following command to stop execution:
 ```bash
-docker-compose -f ./docker-compose.dev.yml down
+docker-compose down
 ```
 
 ### Tests
 Use this command to run tests:
 ```bash
-docker-compose -f docker-compose.dev.yml run api sh -c "python manage.py test"
+docker-compose run api sh -c "python manage.py test"
 ```

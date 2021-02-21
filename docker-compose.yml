@@ -11,7 +11,7 @@ services:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=devpassword
-            - DJANGO_DEBUG=true
+            - DJANGO_SETTINGS_MODULE=django_rest_starter.settings.development
         expose:
             - 8000
         volumes:

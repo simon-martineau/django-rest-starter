@@ -1,3 +1,5 @@
+import secrets
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
@@ -35,10 +37,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 
+def get_default_profile_username() -> str:
+    """Generates a default username"""
+    while True:
+        username = 'guest' + secrets.token_hex(4)
+        if not Profile.objects.exists(username=username):
+            break
+    return username
+
+
 class Profile(models.Model):
     """Profile associated to each user"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    username = models.CharField(max_length=255, unique=True)
+    username = models.CharField(max_length=255, unique=True, default=get_default_profile_username)
     is_username_chosen = models.BooleanField(default=False)  # If the user chose their name or still use the default one
 
     def __str__(self):

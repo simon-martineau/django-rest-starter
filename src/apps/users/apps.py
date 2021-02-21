@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 # noinspection PyUnresolvedReferences
-class AccountsConfig(AppConfig):
+class AccountsConfig(AppConfig):  # pragma: no cover
     name = 'users'
     app_label = 'users'
 
