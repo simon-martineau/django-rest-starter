@@ -1,15 +1,16 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from apps.core.testing.utils import sample_user
+from apps.core.testing.factories import UserFactory
 
 
-class AdminSiteTests(TestCase):
+class AdminSiteUserTests(TestCase):
 
     def setUp(self):
-        self.admin_user = sample_user(superuser=True)
+        self.factory = UserFactory()
+        self.admin_user = self.factory.superuser()
         self.client.force_login(self.admin_user)
-        self.user = sample_user(email='test@marsimon.com')
+        self.user = self.factory.user()
 
     def test_users_listed(self):
         """Users are listed on user page"""

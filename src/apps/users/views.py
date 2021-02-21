@@ -1,8 +1,8 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets
 
 from apps.users.serializers import RegisterUserSerializer
 
 
-class CreateUserView(generics.CreateAPIView):
+class RegisterUserView(generics.CreateAPIView):
     """View to create a user"""
     serializer_class = RegisterUserSerializer

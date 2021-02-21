@@ -9,3 +9,4 @@ src/media
 !**/migrations/__init__.py
 
 *__pycache__
+/src/django_rest_starter/static/

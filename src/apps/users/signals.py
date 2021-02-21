@@ -6,10 +6,13 @@ from django.dispatch import receiver
 from apps.users.models import User, Profile
 
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        # Create a profile for the user
-        Profile.objects.create(user=instance, username='guest' + secrets.token_hex(4))
-
+def _create_user_profile(instance: User):
+    Profile.objects.create(user=instance)
     instance.profile.save()
+
+
+# https://stackoverflow.com/questions/13112302/how-do-i-mock-a-django-signal-handler
+@receiver(post_save, sender=User)
+def user_post_save_signal_handler(sender, instance, created, **kwargs):
+    if created:
+        _create_user_profile(instance)
