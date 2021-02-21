@@ -85,6 +85,13 @@ class PublicUserViewTests(TestCase):
 
         self.assertFalse(user_exists)
 
+
+class TokenViewsTests(TestCase):
+    """Test the jwt auth api"""
+
+    def setUp(self):
+        self.client = APIClient()
+
     def test_obtain_token_pair_for_user(self):
         """Test that a token is created for the user"""
         payload = {'email': 'test@marsimon.com', 'password': 'a;d+-394hasldf0)'}
