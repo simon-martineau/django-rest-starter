@@ -32,3 +32,10 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict):
         """Create a new user with encrypted password and return it"""
         return User.objects.create_user(**validated_data)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for the user model"""
+    class Meta:
+        model = User
+        fields = ['id', 'email']

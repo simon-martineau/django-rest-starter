@@ -1,10 +1,10 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
 from apps.users.models import User
 from apps.core.testing.factories import UserFactory
+from apps.core.testing.utils import APITestCase
 
 
 CREATE_USER_URL = reverse('users:register')
@@ -12,7 +12,7 @@ TOKEN_OBTAIN_URL = reverse('token_obtain_pair')
 TOKEN_REFRESH_URL = reverse('token_refresh')
 
 
-class PublicUserViewTests(TestCase):
+class PublicUserViewTests(APITestCase):
     """Test the users API (public)"""
 
     def setUp(self):
@@ -87,7 +87,7 @@ class PublicUserViewTests(TestCase):
         self.assertFalse(user_exists)
 
 
-class TokenViewsTests(TestCase):
+class TokenViewsTests(APITestCase):
     """Test the jwt auth api"""
 
     def setUp(self):
@@ -150,7 +150,7 @@ class TokenViewsTests(TestCase):
 
 
 # noinspection DuplicatedCode
-class UserViewSetPublicTests(TestCase):
+class UserViewSetPublicTests(APITestCase):
     """Tests for the user resource endpoint from a public pov"""
 
     def setUp(self):
@@ -159,11 +159,11 @@ class UserViewSetPublicTests(TestCase):
         self.base_user = self.factory.user()
         self.staff_user = self.factory.superuser()
 
-        self.url = reverse('users:user')
+        self.url = reverse('users:user-list')
 
     @staticmethod
     def _get_user_url(user: User):
-        return reverse('users:user', args=(user.id,))
+        return reverse('users:user-detail', args=(user.id,))
 
     # Methods with public authorisation
     def test_public_list_fails_with_401(self):
@@ -179,25 +179,33 @@ class UserViewSetPublicTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
         self.assertTrue(User.objects.filter(pk=user_pk).exists())
 
-    def test_public_create_fails_with_405(self):
-        """Test that trying to create a user returns 405"""
+    def test_public_create_fails_with_401(self):
+        """Test that trying to create a user returns 401"""
         payload = {'email': 'testcreateuser@marsimon.com', 'password': '9843hjf+-9834hn'}
 
         res = self.client.post(self.url, payload)
-        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(User.objects.filter(email=payload['email']).exists(), False)
 
-    def test_plublic_update_fails_with_401(self):
-        """Test that trying to update a user fails with 401"""
+    def test_plublic_update_fails_with_404(self):
+        """Test that trying to update a user fails with 404"""
         payload = {'email': 'newemail@marsimon.com'}
         url = self._get_user_url(self.base_user)
         
         res = self.client.patch(url, payload)
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
         self.base_user.refresh_from_db()
         self.assertNotEqual(self.base_user.email, payload['email'])
 
     # Methods with private basic authorization
+    def test_private_basic_user_get_fails_with_404(self):
+        """Test that getting a specific user fails with 404"""
+        self.client.force_authenticate(self.base_user)
+        url = self._get_user_url(self.base_user)
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertNotIn('email', res.data)
+
     def test_private_basic_user_list_fails_with_403(self):
         """Test that listing users fails with 403"""
         self.client.force_authenticate(self.base_user)
@@ -213,33 +221,41 @@ class UserViewSetPublicTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
         self.assertTrue(User.objects.filter(pk=user_pk).exists())
 
-    def test_private_basic_user_create_fails_with_405(self):
-        """Test that trying to create a user returns 405"""
+    def test_private_basic_user_create_fails_with_403(self):
+        """Test that trying to create a user returns 403"""
         self.client.force_authenticate(self.base_user)
         payload = {'email': 'testcreateuser@marsimon.com', 'password': '9843hjf+-9834hn'}
 
         res = self.client.post(self.url, payload)
-        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(User.objects.filter(email=payload['email']).exists(), False)
 
-    def test_private_basic_user_update_fails_with_403(self):
-        """Test that trying to update a user fails with 403"""
+    def test_private_basic_user_update_fails_with_404(self):
+        """Test that trying to update a user fails with 404"""
         self.client.force_authenticate(self.base_user)
         payload = {'email': 'newemail@marsimon.com'}
         url = self._get_user_url(self.base_user)
 
         res = self.client.patch(url, payload)
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
         self.base_user.refresh_from_db()
         self.assertNotEqual(self.base_user.email, payload['email'])
 
     # Methods with staff authorization
+    def test_private_staff_user_get_succeeds(self):
+        """Test that getting a specific user succeeds"""
+        self.client.force_authenticate(self.staff_user)
+        url = self._get_user_url(self.base_user)
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertAllIn(('id', 'email'), res.data)
+
     def test_private_staff_user_list_succeeds(self):
         """Test that listing users succeeds"""
         self.client.force_authenticate(self.staff_user)
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertIn('users', res.data)
+        self.assertIn('id', res.data[0])
 
     def test_private_staff_user_delete_succeeds(self):
         """Test that deleting a user succeeds"""
@@ -247,7 +263,7 @@ class UserViewSetPublicTests(TestCase):
         url = self._get_user_url(self.base_user)
         res = self.client.delete(url)
         user_pk = self.base_user.pk
-        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(User.objects.filter(pk=user_pk).exists(), False)
 
     def test_private_staff_user_create_fails_with_405(self):
@@ -268,5 +284,5 @@ class UserViewSetPublicTests(TestCase):
         res = self.client.patch(url, payload)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.base_user.refresh_from_db()
-        self.assertNotEqual(self.base_user.email, payload['email'])
+        self.assertEqual(self.base_user.email, payload['email'])
 
