@@ -36,6 +36,8 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user model"""
+    url = serializers.HyperlinkedIdentityField(view_name='users:user-detail')
+
     class Meta:
         model = User
-        fields = ['id', 'email']
+        fields = ['id', 'email', 'groups', 'url']

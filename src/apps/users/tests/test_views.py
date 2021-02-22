@@ -254,7 +254,7 @@ class UserViewSetPublicTests(APITestCase):
         self.client.force_authenticate(self.staff_user)
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertIn('id', res.data[0])
+        self.assertAllIn(('id', 'email', 'url', 'groups'), res.data['results'][0])
 
     def test_private_staff_user_delete_succeeds(self):
         """Test that deleting a user succeeds"""
