@@ -6,7 +6,6 @@ from apps.users.models import User
 from apps.core.testing.factories import UserFactory
 from apps.core.testing.utils import APITestCase
 
-
 CREATE_USER_URL = reverse('users:register')
 TOKEN_OBTAIN_URL = reverse('token_obtain_pair')
 TOKEN_REFRESH_URL = reverse('token_refresh')
@@ -191,7 +190,7 @@ class UserViewSetPublicTests(APITestCase):
         """Test that trying to update a user fails with 404"""
         payload = {'email': 'newemail@marsimon.com'}
         url = self._get_user_url(self.base_user)
-        
+
         res = self.client.patch(url, payload)
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
         self.base_user.refresh_from_db()
@@ -285,4 +284,3 @@ class UserViewSetPublicTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.base_user.refresh_from_db()
         self.assertEqual(self.base_user.email, payload['email'])
-
