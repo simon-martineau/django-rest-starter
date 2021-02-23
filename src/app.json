@@ -1,7 +1,7 @@
 {
     "scripts": {
         "dokku": {
-            "postdeploy": "python manage.py create_default_superuser"
+            "predeploy": "python manage.py makemigrations && python manage.py migrate --no-input ; python manage.py create_default_superuser"
         }
     }
 }
