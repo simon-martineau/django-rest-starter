@@ -52,6 +52,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_HEADERS = {
     'Access-Control-Allow-Origin': '*'
 }
+
 AWS_LOCATION = 'drs/static'
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
