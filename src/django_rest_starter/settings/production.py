@@ -5,13 +5,22 @@ import dj_database_url
 # --------------------------------------------------------------------------------
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
-ALLOWED_HOSTS = ['api.starter.simonmartineau.dev',]
+ALLOWED_HOSTS = ['api.starter.simonmartineau.dev', ]
 
 # APPS
 # --------------------------------------------------------------------------------
 INSTALLED_APPS += [
     'storages'
 ]
+
+# MIDDLEWARE
+# --------------------------------------------------------------------------------
+MIDDLEWARE.insert(1, 'apps.core.middleware.HideAdminMiddleware')  # Insert after security middleware
+# Hide admin page for certain ips
+
+# HIDE ADMIN
+# --------------------------------------------------------------------------------
+HIDE_ADMIN_ALLOWED_IPS = ['66.131.241.214']
 
 # REST FRAMEWORK
 # --------------------------------------------------------------------------------
