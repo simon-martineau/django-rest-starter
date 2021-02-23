@@ -1,1 +1,1 @@
-web: gunicorn src.django_rest_starter.wsgi
+web: cd src && gunicorn django_rest_starter.wsgi:application
