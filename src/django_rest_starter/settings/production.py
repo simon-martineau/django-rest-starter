@@ -48,6 +48,10 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
+# We need this for the fonts to load
+AWS_HEADERS = {
+    'Access-Control-Allow-Origin': '*'
+}
 AWS_LOCATION = 'drs/static'
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
