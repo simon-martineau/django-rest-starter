@@ -5,7 +5,7 @@ import dj_database_url
 # --------------------------------------------------------------------------------
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
-ALLOWED_HOSTS = ['starter.simonmartineau.dev', ]
+ALLOWED_HOSTS = ['api.starter.simonmartineau.dev',]
 
 # APPS
 # --------------------------------------------------------------------------------
