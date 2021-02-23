@@ -1,3 +1,5 @@
+import json
+
 from .base import *
 import dj_database_url
 
@@ -20,7 +22,7 @@ MIDDLEWARE.insert(1, 'apps.core.middleware.HideAdminMiddleware')  # Insert after
 
 # HIDE ADMIN
 # --------------------------------------------------------------------------------
-HIDE_ADMIN_ALLOWED_IPS = ['66.131.241.214']
+HIDE_ADMIN_ALLOWED_IPS = json.loads(os.environ['DJANGO_ADMIN_WHITELIST_IPS'])
 
 # REST FRAMEWORK
 # --------------------------------------------------------------------------------
