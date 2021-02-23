@@ -1,4 +1,5 @@
 from .base import *
+import dj_database_url
 
 # GENERAL
 # --------------------------------------------------------------------------------
@@ -28,11 +29,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # DATABASE
 # --------------------------------------------------------------------------------
+# parse the database url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['DATABASE_URL'],
-    }
+    'default': dj_database_url.config(conn_max_age=600)
 }
 
 # STATIC
