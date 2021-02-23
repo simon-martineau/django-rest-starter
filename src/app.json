@@ -1,5 +1,7 @@
 {
     "scripts": {
-        "postdeploy": "python manage.py create_default_superuser"
+        "dokku": {
+            "postdeploy": "python manage.py create_default_superuser"
+        }
     }
 }
