@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from django.test import TestCase, override_settings, RequestFactory, modify_settings
+from django.test import TestCase, override_settings, RequestFactory
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
 from rest_framework import status

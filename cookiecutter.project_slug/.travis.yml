@@ -1,8 +1,5 @@
 language: minimal
 
-branches:
-    except:
-        - /^cookie-cutter.*$/
 
 env:
     - CODECOV_TOKEN="c51b1965-fd46-4c03-b4e4-2b22d03d033e"

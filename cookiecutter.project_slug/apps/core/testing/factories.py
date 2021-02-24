@@ -1,4 +1,4 @@
-from apps.users.models import User, Profile
+from apps.users.models import User
 
 
 class UserFactory:

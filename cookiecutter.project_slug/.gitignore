@@ -1,11 +1,9 @@
 **/.idea
-/instance/*
+#/instance/prod.env
 /data/
 
 /staticfiles/
 /media/
-#**/migrations/*
-#!**/migrations/__init__.py
 
 *__pycache__
 /{{cookiecutter.project_slug}}/static/
