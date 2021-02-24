@@ -36,7 +36,7 @@ services:
 
     nginx:
         build:
-            context: server/dev
+            context: nginx/dev
         container_name: server
         ports:
             - 8000:80
