@@ -4,8 +4,8 @@
 
 /staticfiles/
 /media/
-**/migrations/*
-!**/migrations/__init__.py
+#**/migrations/*
+#!**/migrations/__init__.py
 
 *__pycache__
 /django_rest_starter/static/
