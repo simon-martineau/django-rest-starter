@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
     api:
-        container_name: django
+        container_name: {{cookiecutter.project_slug}}_django
         build:
             context: .
             dockerfile: compose/dev/django/Dockerfile
@@ -37,7 +37,7 @@ services:
     nginx:
         build:
             context: compose/dev/nginx
-        container_name: server
+        container_name: {{cookiecutter.project_slug}}_nginx
         ports:
             - 8000:80
         volumes:
