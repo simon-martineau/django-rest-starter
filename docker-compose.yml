@@ -16,7 +16,7 @@ services:
             - 8000
         volumes:
             - ./src:/code
-            - static_volume:/code/staticfiles
+            - static_volume:/var/www/static
 #            - media_volume:/code/media
         command: /start_dev.sh
         depends_on:
