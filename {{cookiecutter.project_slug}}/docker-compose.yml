@@ -2,12 +2,12 @@ version: "3.7"
 
 services:
     api:
-        container_name: api
+        container_name: django
         build:
             context: .
             dockerfile: compose/dev/django/Dockerfile
         environment:
-            - POSTGRES_HOST=postgres
+            - POSTGRES_HOST={{cookiecutter.project_slug}}_postgres
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=devpassword
@@ -23,7 +23,7 @@ services:
             - postgres
 
     postgres:
-        container_name: postgres
+        container_name: {{cookiecutter.project_slug}}_postgres
         image: postgres:12.0-alpine
         environment:
             - POSTGRES_DB={{cookiecutter.project_slug}}
