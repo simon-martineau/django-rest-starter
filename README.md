@@ -4,9 +4,9 @@
 ##### A starter template for building rest apis with django
 Replace every instance of "django-rest-starter" in the code by the name of your app and you're good to go!
 
-Make sur to look at the [pycharm config](ideaConfig.md)
+Make sure to look at the [pycharm config](ideaConfig.md)
 
-## Installation
+## Development
 ### Requirements
 You will need the following to run the app
 - docker ([installation](https://docs.docker.com/get-docker/))
