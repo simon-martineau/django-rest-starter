@@ -7,7 +7,7 @@ import dj_database_url
 # --------------------------------------------------------------------------------
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
-ALLOWED_HOSTS = ['api.starter.simonmartineau.dev', ]
+ALLOWED_HOSTS = ['{{cookiecutter.domain}}', ]
 
 # APPS
 # --------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ DATABASES = {
 
 # STATIC
 # --------------------------------------------------------------------------------
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = 'staticfiles'  # TODO: need this?
 
 # AWS
 # --------------------------------------------------------------------------------

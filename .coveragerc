@@ -1,6 +1,6 @@
 [run]
 omit =
-	django_rest_starter/*
+	{{cookiecutter.project_slug}}/*
 	manage.py
 	*_unused.py
 	apps/core/management/*

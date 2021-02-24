@@ -21,9 +21,9 @@ USE_TZ = True
 # URLS
 # ------------------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
-ROOT_URLCONF = 'django_rest_starter.urls'
+ROOT_URLCONF = '{{cookiecutter.project_slug}}.urls'
 # https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = 'django_rest_starter.wsgi.application'
+WSGI_APPLICATION = '{{cookiecutter.project_slug}}.wsgi.application'
 
 # APPS
 # ------------------------------------------------------------------------------------------

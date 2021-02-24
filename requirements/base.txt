@@ -2,7 +2,6 @@
 # Django
 django==3.1.7
 dj-database-url==0.5.0
-django-storages==1.11.1
 
 # Rest framework
 djangorestframework==3.12.2

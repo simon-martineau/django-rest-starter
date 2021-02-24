@@ -1,8 +1,5 @@
-# django-rest-starter
-[![Build Status](https://travis-ci.com/simon-martineau/django-rest-starter.svg?branch=main)](https://travis-ci.com/simon-martineau/django-rest-starter)
-[![codecov](https://codecov.io/gh/simon-martineau/django-rest-starter/branch/main/graph/badge.svg?token=MGCXZA5MRM)](https://codecov.io/gh/simon-martineau/django-rest-starter)
+# {{cookiecutter.project_name}}
 ##### A starter template for building rest apis with django
-Replace every instance of "django-rest-starter" in the code by the name of your app and you're good to go!
 
 Make sure to look at the [pycharm config](ideaConfig.md)
 
@@ -16,8 +13,8 @@ You will need the following to run the app
 Perform these steps to quickly get started
 
 **Note:** ports 8000 and 5444 need to be available
-```bash
-cd someapi
+```shell script
+cd {{cookiecutter.project_slug}}
 docker-compose up -d
 ```
 

@@ -1,1 +1,1 @@
-web: gunicorn django_rest_starter.wsgi:application
+web: gunicorn {{cookiecutter.project_slug}}.wsgi:application

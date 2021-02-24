@@ -8,4 +8,4 @@
 #!**/migrations/__init__.py
 
 *__pycache__
-/django_rest_starter/static/
+/{{cookiecutter.project_slug}}/static/

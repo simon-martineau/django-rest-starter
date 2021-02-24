@@ -11,7 +11,7 @@ services:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=devpassword
-            - DJANGO_SETTINGS_MODULE=django_rest_starter.settings.development
+            - DJANGO_SETTINGS_MODULE={{cookiecutter.project_slug}}.settings.development
         expose:
             - 8000
         volumes:
@@ -26,7 +26,7 @@ services:
         container_name: postgres
         image: postgres:12.0-alpine
         environment:
-            - POSTGRES_DB=django_rest_starter
+            - POSTGRES_DB={{cookiecutter.project_slug}}
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=devpassword
         ports:
