@@ -1,4 +1,4 @@
-language: python
+language: minimal
 
 env:
     - CODECOV_TOKEN="c51b1965-fd46-4c03-b4e4-2b22d03d033e"
@@ -8,8 +8,6 @@ python:
 
 services:
     - docker
-
-before_script: pip install docker-compose
 
 script:
     - docker-compose run api bash -c "source /migrate.sh"
