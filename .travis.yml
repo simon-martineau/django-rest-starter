@@ -3,9 +3,6 @@ language: minimal
 env:
     - CODECOV_TOKEN="c51b1965-fd46-4c03-b4e4-2b22d03d033e"
 
-python:
-    - "3.9"
-
 services:
     - docker
 
