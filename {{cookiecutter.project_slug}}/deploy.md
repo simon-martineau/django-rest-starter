@@ -30,7 +30,7 @@ dokku domains:add {{project_with_hyphens}} {{cookiecutter.domain}}
 All we need is to add the remote and push a subtree:
 ```shell script
 git remote add dokku dokku@<server_ip>:{{project_with_hyphens}}
-git subtree push --prefix src dokku master
+git push dokku master
 ```
 
 #### SSL with letsencrypt
