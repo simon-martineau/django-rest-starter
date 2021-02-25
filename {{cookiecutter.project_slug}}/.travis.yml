@@ -1,14 +1,10 @@
 language: minimal
 
 
-env:
-    - CODECOV_TOKEN="c51b1965-fd46-4c03-b4e4-2b22d03d033e"
-
 services:
     - docker
 
 script:
-    - docker-compose run api bash -c "source /migrate.sh"
     - docker-compose run api flake8
     - docker-compose run api sh -c "coverage run --source='.' manage.py test && coverage xml"
 
