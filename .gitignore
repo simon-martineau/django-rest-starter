@@ -1,12 +1,2 @@
-**/.idea
-instance/*
-!instance/.gitkeep
-data
-
-src/staticfiles
-src/media
-**/migrations/*
-!**/migrations/__init__.py
-
-*__pycache__
-/src/django_rest_starter/static/
+/.idea/
+/target/

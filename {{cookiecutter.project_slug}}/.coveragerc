@@ -1,0 +1,8 @@
+[run]
+omit =
+	{{cookiecutter.project_slug}}/*
+	manage.py
+	*_unused.py
+	apps/core/management/*
+  apps/core/testing/*
+
