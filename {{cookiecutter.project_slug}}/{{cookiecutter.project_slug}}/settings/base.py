@@ -1,6 +1,11 @@
-import os
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 # GENERAL
 # ------------------------------------------------------------------------------------------
@@ -90,14 +95,16 @@ MIDDLEWARE = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = str(BASE_DIR / 'static')
+
+STATICFILES_DIRS = []
 
 # MEDIA
 # ------------------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = str(BASE_DIR, 'media')
 
 # TEMPLATES
 # ------------------------------------------------------------------------------------------

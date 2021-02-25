@@ -1,7 +1,7 @@
 **/.idea
 #/instance/prod.env
 /data/
-
+/instance/
 /staticfiles/
 /media/
 

@@ -7,11 +7,7 @@ services:
             context: .
             dockerfile: compose/dev/django/Dockerfile
         environment:
-            - POSTGRES_HOST={{cookiecutter.project_slug}}_postgres
-            - POSTGRES_DB=postgres
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=devpassword
-            - DJANGO_SETTINGS_MODULE={{cookiecutter.project_slug}}.settings.development
+            - ENV_PATH=./instance/development.env
         expose:
             - 8000
         volumes:

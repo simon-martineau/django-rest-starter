@@ -1,19 +1,41 @@
 import json
 
 from .base import *
-import dj_database_url
+from .base import env
 
 # GENERAL
 # --------------------------------------------------------------------------------
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = False
 ALLOWED_HOSTS = ['{{cookiecutter.domain}}', ]
 
-# APPS
+# STORAGE
 # --------------------------------------------------------------------------------
-INSTALLED_APPS += [
-    'storages'
-]
+INSTALLED_APPS += ['storages']
+AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME')
+
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+_AWS_EXPIRY = 60 * 60 * 24 * 7
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate"
+}
+
+AWS_LOCATION = 'drs'
+
+# STATIC
+# ---------------------------
+STATICFILES_STORAGE = 'apps.core.utils.storages.StaticRootS3Boto3Storage'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/static/'
+
+# MEDIA
+# ---------------------------
+DEFAULT_FILE_STORAGE = "portfolio_api.utils.storages.MediaRootS3Boto3Storage"
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/media/'
+
 
 # MIDDLEWARE
 # --------------------------------------------------------------------------------
@@ -22,7 +44,7 @@ MIDDLEWARE.insert(1, 'apps.core.middleware.HideAdminMiddleware')  # Insert after
 
 # HIDE ADMIN
 # --------------------------------------------------------------------------------
-HIDE_ADMIN_ALLOWED_IPS = json.loads(os.environ['DJANGO_ADMIN_WHITELIST_IPS'])
+HIDE_ADMIN_ALLOWED_IPS = json.loads(env('DJANGO_ADMIN_WHITELIST_IPS'))
 
 # REST FRAMEWORK
 # --------------------------------------------------------------------------------
@@ -42,33 +64,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # --------------------------------------------------------------------------------
 # parse the database url
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600)
+    'default': env.db("DATABASE_URL")
 }
-
-# STATIC
-# --------------------------------------------------------------------------------
-STATIC_ROOT = 'staticfiles'  # TODO: need this?
-
-# AWS
-# --------------------------------------------------------------------------------
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
-
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-# We need this for the fonts to load
-AWS_HEADERS = {
-    'Access-Control-Allow-Origin': '*'
-}
-
-AWS_LOCATION = 'drs/static'
-
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
-STATICFILES_DIRS = []
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
 
 # LOGGING
 # --------------------------------------------------------------------------------

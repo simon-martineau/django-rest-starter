@@ -1,4 +1,5 @@
 from .base import *
+from .base import env
 
 # GENERAL
 # --------------------------------------------------------------------------------
@@ -20,9 +21,9 @@ STATIC_ROOT = '/var/www/static'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ['POSTGRES_HOST'],
-        'NAME': os.environ['POSTGRES_DB'],
-        'USER': os.environ['POSTGRES_USER'],
-        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': env('POSTGRES_HOST'),
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
     }
 }

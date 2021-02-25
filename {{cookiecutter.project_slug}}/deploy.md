@@ -1,23 +1,6 @@
 # Deploy notes
 ## Environement variables
-The following environment varialbes need to be set on the dokku/heroku app environment:
-```dotenv
-DJANGO_SECRET_KEY  # Your django secret key for production
-DJANGO_SETTINGS_MODULE  # {{cookiecutter.project_slug}}.settings.production
-
-# These apply to the default user created by the postdeploy script
-# If the user already exists, the creation is skipped
-DJANGO_SUPERUSER_EMAIL 
-DJANGO_SUPERUSER_PASSWORD
-
-# Aws S3 credentials
-AWS_ACCESS_KEY_ID  
-AWS_SECRET_ACCESS_KEY
-AWS_STORAGE_BUCKET_NAME
-
-# These IP addresses will not receive a 404 while visiting any url that begins with /admin
-DJANGO_ADMIN_WHITELIST_IPS
-```
+Make sure to set all necessary environment variables in instance/production.env
 {% set project_with_hyphens = cookiecutter.project_slug | replace("_", "-") %}
 ## Dokku
 Here are the steps to deploy using dokku
@@ -32,9 +15,9 @@ sudo dokku postgres:create drs-database
 sudo dokku postgres:link drs-database {{project_with_hyphens}}
 ```
 
-Don't forget to set the environment variables for your app using:
+Also, point your app to the environment variables file:
 ```shell script
-dokku config:set {{project_with_hyphens}} KEY1=value1 KEY2=value2
+sudo dokku config:set {{project_with_hyphens}} ENV_PATH=instance/production.env
 ```
 
 Also, set your domains for the app like this: (and don't forget to point your dns records to the dokku host,
